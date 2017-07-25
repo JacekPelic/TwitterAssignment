@@ -1,0 +1,35 @@
+﻿@using LinqToTwitter;
+@using PagedList.Mvc;
+@using PagedList;
+
+
+@model PagedList<Status>
+
+
+@{
+    ViewBag.Title = "ShowTweets";
+}
+
+<h3>Tweets:</h3>
+<body>
+
+    @foreach (var item in Model)
+    {
+        <div class="well" id="divContent">
+            @using (Html.BeginForm("SaveTweet", "Home"))
+            {
+                <div class="pull-right">
+                    @Html.Hidden("ID", @item.StatusID)
+                    @Html.Hidden("returnUrl", Request.Url.Query)
+                    <input type="submit" class="btn btn-success" value="Save Tweet" />
+                </div>
+            }
+            <p>@item.CreatedAt</p>
+            <b>@item.User.Name</b>
+            <p>@item.Text</p>
+        </div>
+            }
+</body>
+
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("ShowTweets", new { page }))
+
